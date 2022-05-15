@@ -18,7 +18,15 @@ connection.connect((error) => {
 
 //Routes
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  res.send('Budget Manager App - Alkemy FullStack Challenge');
+});
+
+app.get('/transactions', (req, res) => {
+  connection.query('SELECT * FROM `transactions`', (error, results) => {
+    if (error) throw error;
+    console.log(results);
+    res.json(results);
+  });
 });
 
 app.listen(PORT, () => {
