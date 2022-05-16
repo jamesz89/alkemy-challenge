@@ -1,2 +1,3 @@
-controller/node_modules
-controller/requests
+api/node_modules
+api/requests
+api/.eslintrc.json
