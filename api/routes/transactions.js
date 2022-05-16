@@ -4,8 +4,7 @@ const connection = require("../connection");
 Router.get('/', (req, res) => {
   connection.query("SELECT * FROM `transactions`", (error, results) => {
     if (error) throw error;
-    console.log(results);
-    res.json(results);
+    res.status(200).json(results);
   });
 });
 
@@ -39,10 +38,11 @@ Router.post('/', (req, res) => {
 Router.delete('/:id', (req, res) => {
   const id = req.params.id;
 
-  connection.query(`DELETE FROM transactions WHERE id=${id};`, (error, results) => {
+  connection.query(`DELETE FROM transactions WHERE id=${id};`, (error) => {
     if (error) throw error;
-    console.log(results);
-    res.json(results);
+    res.status(204).send({
+    "message": "transaction deleted",
+    });
   });
 });
 
