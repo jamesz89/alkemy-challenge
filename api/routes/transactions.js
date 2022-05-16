@@ -26,11 +26,14 @@ Router.post('/', (req, res) => {
     "${transaction.date}", 
     "${transaction.type}", 
     ${transaction.categoryId})`,
-    (error, results) => {
+    (error) => {
       if (error) throw error;
-      console.log(results);
-      res.json(results);
     });
+
+  connection.query(`SELECT * FROM transactions WHERE id=LAST_INSERT_ID()`, (error, result) => {
+    if (error) throw error;
+    res.status(200).json(result);
+  });
 });
 
 Router.delete('/:id', (req, res) => {
@@ -54,11 +57,13 @@ Router.put('/:id', (req, res) => {
   type="${body.type}",
   categoryId=${body.categoryId}
 	WHERE id=${id};`,
-    (error, results) => {
+    (error) => {
       if (error) throw error;
-      console.log(results);
-      res.json(results);
     });
+  connection.query(`SELECT * FROM transactions WHERE id=LAST_INSERT_ID()`, (error, result) => {
+    if (error) throw error;
+    res.status(200).json(result);
+  });
 });
 
 module.exports = Router;
