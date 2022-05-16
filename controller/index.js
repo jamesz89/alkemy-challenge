@@ -53,6 +53,15 @@ app.post('/transactions', bodyParser.json(), (req, res) => {
     });
 });
 
+app.delete('/transactions/:id', bodyParser.json(), (req, res) => {
+  const id = req.params.id;
+  connection.query(`DELETE FROM transactions WHERE id=${id};`, (error, results) => {
+    if (error) throw error;
+    console.log(results);
+    res.json(results);
+  });
+});
+
 const PORT = 3000;
 
 app.listen(PORT, () => {
