@@ -2,7 +2,7 @@ const Router = require('express').Router();
 const connection = require("../connection");
 
 Router.get('/', (req, res) => {
-  connection.query("SELECT * FROM `transactions`", (error, results) => {
+  connection.query(`SELECT * FROM transactions`, (error, results) => {
     if (error) throw error;
     res.status(200).json(results);
   });
