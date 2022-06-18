@@ -1,5 +1,6 @@
+// eslint-disable-next-line new-cap
 const Router = require('express').Router();
-const connection = require("../connection");
+const connection = require('../connection');
 
 Router.get('/', (req, res) => {
   connection.query(`SELECT * FROM transactions`, (error, results) => {
@@ -14,7 +15,7 @@ Router.post('/', (req, res) => {
     amount: req.body.amount,
     date: req.body.date,
     type: req.body.type,
-    categoryId: req.body.categoryId
+    categoryId: req.body.categoryId,
   };
 
   connection.query(`
@@ -25,11 +26,13 @@ Router.post('/', (req, res) => {
     "${transaction.date}", 
     "${transaction.type}", 
     ${transaction.categoryId})`,
-    (error) => {
-      if (error) throw error;
-    });
+  (error) => {
+    if (error) throw error;
+  });
 
-  connection.query(`SELECT * FROM transactions WHERE id=LAST_INSERT_ID()`, (error, result) => {
+  connection.query(`
+      SELECT * FROM transactions WHERE id=LAST_INSERT_ID()`,
+  (error, result) => {
     if (error) throw error;
     res.status(200).json(result);
   });
@@ -41,7 +44,7 @@ Router.delete('/:id', (req, res) => {
   connection.query(`DELETE FROM transactions WHERE id=${id};`, (error) => {
     if (error) throw error;
     res.status(204).send({
-    "message": "transaction deleted",
+      'message': 'transaction deleted',
     });
   });
 });
@@ -51,19 +54,21 @@ Router.put('/:id', (req, res) => {
   const body = req.body;
 
   connection.query(`UPDATE transactions
-	SET concept="${body.concept}",
+SET concept="${body.concept}",
   amount=${body.amount},
   date="${body.date}",
   type="${body.type}",
   categoryId=${body.categoryId}
-	WHERE id=${id};`,
-    (error) => {
-      if (error) throw error;
-    });
-  connection.query(`SELECT * FROM transactions WHERE id=LAST_INSERT_ID()`, (error, result) => {
+WHERE id=${id};`,
+  (error) => {
     if (error) throw error;
-    res.status(200).json(result);
   });
+  connection.query(
+      `SELECT * FROM transactions WHERE id=LAST_INSERT_ID()`,
+      (error, result) => {
+        if (error) throw error;
+        res.status(200).json(result);
+      });
 });
 
 module.exports = Router;
